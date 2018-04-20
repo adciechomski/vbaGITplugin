@@ -9,7 +9,7 @@ Dim capturedOutput As String
 tempFile = Environ$("TEMP") & "\" & CreateObject("Scripting.FileSystemObject").GetTempName()
 
 ' Define the command to invoke.
-cmd = "git -C " & Chr(34) & "C:\Users\aciec\OneDrive\Documents\VBA Projects" & Chr(34) & " status"
+cmd = "git -C " & Chr(34) & "C:\Users\" & Environ$("Username") & "\OneDrive\Documents\VBA Projects" & Chr(34) & " status"
 
 ' Use .Run() to invoke the command.
 '  - In order to use output redirection, the command must be prefixed with 'cmd /c '.
