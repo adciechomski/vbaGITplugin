@@ -1,0 +1,33 @@
+Sub testshell()
+'Code source: https://stackoverflow.com/questions/41230050/how-do-i-run-ssh-in-shell-to-return-values-into-vba-variable?noredirect=1&lq=1
+Dim cmd As String
+Dim exitCode As Integer
+Dim tempFile As String
+Dim capturedOutput As String
+
+' Construct the name of a temporary file to capture the command's stdout output in.
+tempFile = Environ$("TEMP") & "\" & CreateObject("Scripting.FileSystemObject").GetTempName()
+
+' Define the command to invoke.
+cmd = "git -C " & Chr(34) & "C:\Users\aciec\OneDrive\Documents\VBA Projects" & Chr(34) & " status"
+
+' Use .Run() to invoke the command.
+'  - In order to use output redirection, the command must be prefixed with 'cmd /c '.
+'  - Setting the last argument to `True` makes the invocation synchronous.
+'  - Replace vbNormalFocus with vbHidden to run the command *invisibly*.
+exitCode = CreateObject("WScript.Shell").Run("cmd /c " & cmd & " >" & tempFile, vbHidden, True)
+If exitCode = 0 Then ' Command succeeded.
+
+    ' Read the output file, then delete the temporary file.
+    capturedOutput = CreateObject("Scripting.FileSystemObject").OpenTextFile(tempFile).ReadAll()
+    CreateObject("Scripting.FileSystemObject").DeleteFile (tempFile)
+
+    ' Display the output.
+    MsgBox "Captured Output:" & vbNewLine & capturedOutput
+
+Else ' Command indicated failure.
+
+    MsgBox "An unexpected error occurred.", vbExclamation
+
+End If
+End Sub
